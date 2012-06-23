@@ -1,0 +1,17 @@
+{
+  "name": "extension-include",
+  "version": "1.0.9",
+  "description": "Some really nifty functions for non-jQuery chrome extension development",
+  "author": "Devin Rhode <devinrhode2@gmail.com>",
+  "main": "extension-include.js",
+  "preferGlobal": false,
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  },
+  "repository": {
+    "url": ""
+  }
+}
