@@ -6,7 +6,7 @@ Some general motha fuckin functions for extension development, TOTALLY undocumen
 Install
 ---------------
 
-npm install extension-include
+    npm install extension-include
 
 OOO!
 
