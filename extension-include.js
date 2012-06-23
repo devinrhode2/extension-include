@@ -30,16 +30,6 @@ String.prototype.contains = function StringPrototypeHas(string) {
   return this.indexOf(string) > -1;
 };
 
-String.prototype.toBoolean = function StringPrototypeToBoolean() {
-  if (this === 'false') {
-    return false;
-  } else if (this === 'true') {
-    return true;
-  } else {
-    throw 'string is not \'true\' or \'false\'';
-  }
-};
-
 var ajax = {};
 ajax.x = function() {
   return new XMLHttpRequest;
@@ -190,5 +180,27 @@ window.runInPage = function runInPage() {
   }
   //script.removeNode(true); ?
 }
+
+/**
+ * guardedParse - protected JSON.parse
+ * assumes chrome, assumes JSON
+ */
+JSON.guardedParse = function guardedParse(string) {
+  var returnValue = {};
+  try {
+    if (string.indexOf('{') === 0 && string.charAt(string.length - 1) === '}') {
+      returnValue = JSON.parse(string);
+    } else {
+      console.log('first and last string are not { and } respectively. returning false');
+      returnValue = false;
+    }
+  } catch(e) {
+    alert('BAD JSON: ' + string);
+    console.error('CAUGHT ERROR! ->', e);
+    returnValue = false;
+  }
+  return returnValue;
+};
+
 
 }());
