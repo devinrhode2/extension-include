@@ -1,6 +1,6 @@
 {
   "name": "extension-include",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Some really nifty functions for high performance chrome extensions",
   "author": "Devin Rhode <devinrhode2@gmail.com> (http://thescoutapp.com)",
   "main": "extension-include.js",
@@ -12,5 +12,8 @@
     "type": "git",
     "url": "git://github.com/devinrhode2/extension-include.git"
   },
-  "homepage": "https://github.com/devinrhode2/extension-include"
+  "homepage": "https://github.com/devinrhode2/extension-include",
+  "engines": {
+    "node": "*"
+  }
 }
