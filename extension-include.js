@@ -9,7 +9,7 @@
  * has: Does a string have a certain substring inside it? returns boolean
  */
 
-(function includeJSStrict(){
+(function extensionInclude(){
 'use strict';
 
 window.$ = window.$ || {};
@@ -53,6 +53,17 @@ window.POST = function POST(url, func, args) {
 
 window.GET = function GET(url, callback){
   ajax.send(url,callback,'GET');
+};
+
+window.GETXml = function GETXml(u, f){
+  var x = new XMLHttpRequest();
+  x.open('GET', u, true);
+  x.onreadystatechange = function() {
+    if(x.readyState == 4) {
+      f(x.responseXML);
+    }
+  };
+  x.send()
 };
 
 window.masterHistory = function masterHistory(){
@@ -106,14 +117,14 @@ window.error = function error(message){
 };
 
 //more specific
-//kiss metrics push!
-window.kmpush = function kmpush(){
+//kiss metrics events!
+window.event = function event(){
   if (typeof _kmq === 'undefined') {
     window._kmq = [];
   }
   var argsArray = [].slice.call(arguments);
   if (argsArray.length === 1) {
-    _kmq.push(['record', argsArray[0]]);
+    _kmq.push(['record', argsArray[0].replace(/\s/gi, '_')]);
   } else {
     _kmq.push(argsArray);
   }
@@ -191,7 +202,7 @@ JSON.guardedParse = function guardedParse(string) {
     if (string.indexOf('{') === 0 && string.charAt(string.length - 1) === '}') {
       returnValue = JSON.parse(string);
     } else {
-      console.log('first and last string are not { and } respectively. returning false');
+      console.log('first and last characters are not { and }. returning false');
       returnValue = false;
     }
   } catch(e) {
