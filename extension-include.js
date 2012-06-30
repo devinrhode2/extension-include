@@ -10,7 +10,7 @@
  */
 
 //'globals':
-var getClass, getId, getTag, GET, POST, fail, log, warn, error, event, storageDefault, createElement, runInPage, nodeReady;
+var getClass, getId, getTag, GET, POST, fail, log, warn, error, trackEvent, storageDefault, createElement, runInPage, nodeReady;
 (function extensionInclude(){
 'use strict';
 
@@ -107,8 +107,7 @@ error = function error(message){
 };
 
 //KISSmetrics
-event = 
-  function event(){
+trackEvent = function trackEvent(){
   if (typeof _kmq === 'undefined') {
     window._kmq = [];
   }
