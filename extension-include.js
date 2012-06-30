@@ -1,32 +1,33 @@
 /* By Devin Rhode (devinrhode2@gmail.com)
  * General library-esque functions!
  *
- * $.class is a wrapper on document.getElementsByClassName
- * $.id is a wrapper on getElementById
+ * getClass is a wrapper on document.getElementsByClassName
+ * getId is a wrapper on getElementById
  * log('things like', trickyVaribles);
- * fail('When some bad shit occured.');
+ * fail('When some bad shit occured.'); //throws and alerts error.
  *
- * has: Does a string have a certain substring inside it? returns boolean
+ * contains: Does a string have a certain substring inside it? returns boolean
  */
 
+//'globals':
+var getClass, getId, getTag, GET, POST, fail, log, warn, error, event, storageDefault, createElement, runInPage, nodeReady;
 (function extensionInclude(){
 'use strict';
 
-window.$ = window.$ || {};
-$.class = function getElementsByClassNameWrapper(elements){
+getClass = function getClass(elements){
   return document.getElementsByClassName(elements);
 };
-$.id = function getElementByIdWrapper(elements){
+getId = function getId(elements){
   return document.getElementById(elements);
 };
-$.tag = function getElementsByTagNameWrapper(elements){
+getTag = function getTag(elements){
   return document.getElementsByTagName(elements);
 };
-HTMLElement.prototype.class = HTMLElement.prototype.getElementsByClassName;
-HTMLElement.prototype.id = HTMLElement.prototype.getElementById;
-HTMLElement.prototype.tag = HTMLElement.prototype.getElementsByTagName;
+HTMLElement.prototype.getClass = HTMLElement.prototype.getElementsByClassName;
+HTMLElement.prototype.getId = HTMLElement.prototype.getElementById;
+HTMLElement.prototype.getTag = HTMLElement.prototype.getElementsByTagName;
 
-String.prototype.contains = function StringPrototypeHas(string) {
+String.prototype.contains = function StringPrototypeContains(string) {
   return this.indexOf(string) > -1;
 };
 
@@ -47,38 +48,27 @@ ajax.send = function(u, f, m, a) {
   }
   x.send(a)
 };
-window.POST = function POST(url, func, args) {
+POST = function POST(url, func, args) {
   ajax.send(url, func, "POST", args);
 };
 
-window.GET = function GET(url, callback){
+GET = function GET(url, callback){
   ajax.send(url,callback,'GET');
 };
 
-window.GETXml = function GETXml(u, f){
-  var x = new XMLHttpRequest();
-  x.open('GET', u, true);
-  x.onreadystatechange = function() {
-    if(x.readyState == 4) {
-      f(x.responseXML);
-    }
-  };
-  x.send()
-};
-
-window.masterHistory = function masterHistory(){
+var masterHistory = function masterHistory(){
   //have a master switch on caller.name === 'f' (log) || 'warn' || 'fail' || 'error'
 };
 
 //fail, program cannot continue. Alert a message, and kill it
-window.fail = function fail(message){
+fail = function fail(message){
   masterHistory(arguments);
   alert(message);
   throw message;
 };
 
 //from HTML5 boilerplate. Paul Irish is awesome. I have no idea why the function name is 'f'...
-window.log = function f() {
+log = function f() {
   masterHistory(arguments);
   if (typeof debug !== 'undefined' && debug) {
     if (typeof console !== 'undefined') { // with if (this.console) I was getting "Uncaught TypeError: Cannot read property 'console' of undefined"
@@ -104,21 +94,20 @@ window.log = function f() {
 
 
 //Some common pitfall that is handled. Application will continue fine.
-window.warn = function warn(message){
+warn = function warn(message){
   masterHistory(arguments);
   debug && console.warn(message);
   return message;
 };
 //some error where the program will continue, but this scenario really shouldn't be occuring
-window.error = function error(message){
+error = function error(message){
   masterHistory(arguments);
   debug && console.error(message);
   return message;
 };
 
-//more specific
-//kiss metrics events!
-window.event = function event(){
+//KISSmetrics
+event = function event(){
   if (typeof _kmq === 'undefined') {
     window._kmq = [];
   }
@@ -130,7 +119,7 @@ window.event = function event(){
   }
 };
 
-window.storageDefault = function storageDefault(arg1, arg2){
+storageDefault = function storageDefault(arg1, arg2){
   if (typeof arg1 === 'string') {
     if (localStorage.getItem(arg1) === null) {
       localStorage.setItem(arg1, arg2);
@@ -151,7 +140,7 @@ window.storageDefault = function storageDefault(arg1, arg2){
 
 //very extension specific:
 //coolest method ever!
-$.createElement = function createElement(element, props, attributes) {
+createElement = function createElement(element, props, attributes) {
   var element = document.createElement(element);
   if (typeof props !== 'undefined') {
     for (var prop in props) {
@@ -165,32 +154,6 @@ $.createElement = function createElement(element, props, attributes) {
   }
   return element;
 };
-
-//UPDATE 1.1.0
-window.style = function style(cssString){
-  var s = document.createElement('style');
-  s.innerHTML = cssString;
-  s.setAttribute('from', 'an extension');
-  document.documentElement.appendChild(s);
-};
-
-window.runInPage = function runInPage() {
-  var script = document.createElement('script');
-  script.innerHTML = '';
-  for (task in arguments) {
-    if (typeof arguments[task] === 'string') {
-      script.innerHTML += arguments[task];
-    } else if (typeof arguments[task] === 'function') {
-      script.innerHTML += '(' + arguments[task] + '())';
-    }
-  }
-  try {
-    document.documentElement.appendChild(script);
-  } catch (e) {
-    console.error('CAUGHT ERROR: ', e, 'on:', script.innerHTML);
-  }
-  //script.removeNode(true); ?
-}
 
 /**
  * guardedParse - protected JSON.parse
@@ -213,5 +176,66 @@ JSON.guardedParse = function guardedParse(string) {
   return returnValue;
 };
 
+
+runInPage = function runInPage() {
+  var script = document.createElement('script');
+  script.innerHTML = '';
+  for (var task in arguments) {
+    if (typeof arguments[task] === 'string') {
+      script.innerHTML += arguments[task];
+    } else if (typeof arguments[task] === 'function') {
+      script.innerHTML += '(' + arguments[task] + '())';
+    }
+  }
+  try {
+    document.documentElement.appendChild(script);
+  } catch (e) {
+    console.error('CAUGHT ERROR: ', e, 'on:', script.innerHTML);
+  }
+  //script.removeNode(true); ?
+}
+
+/* node-ready 
+ * See https://github.com/devinrhode2/node-ready
+ * Send questions/problems/critiques on code to: DevinRhode2@gmail.com (put "skywalker.js" in the title)
+ */
+
+nodeReady = function nodeReady(call, readyCallback, timeout){
+  'use strict';//steppin it up!
+  var box = typeof call; //our one and only var...?!
+  if (box === 'string') {
+    try {
+      //breakup each dot, checking if (item) then going item.next, which recursively becomes item
+      //or lean on try/catch more to simply re-try all da time.
+      box = eval(call); //strict mode ('use strict') restricts eval in some fashion...
+    } catch (e) {
+      if (e instanceof EvalError) {
+        console.error('EvalError on call:'+call+' :( try passing in a function'+
+        ' like: \nnodeReady(function(){return '+call+';}, callback);', e);
+      } else {
+        console.error('non-EvalError when executing call:'+call+' :(', e);        
+      }
+    }
+  } else if (box === 'function') {
+    box = call();
+  } else {
+    box = 'At this time, nodeReady only accepts a string javascript call or '+
+          'function for the first argument, and the callback for the second argument.';
+    alert(box);
+    throw box;
+  }
+  //box is either eval(call) or call()
+  if (box) {
+    readyCallback(box);
+  } else {
+    if (typeof timeout === 'undefined') {
+      timeout = 40;
+    }
+    
+    setTimeout(function nodeReadyMainTimeoutCallback(){
+      nodeReady(call, readyCallback);
+    }, timeout);
+  }
+};
 
 }());
