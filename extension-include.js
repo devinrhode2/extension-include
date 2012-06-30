@@ -48,7 +48,7 @@ ajax.send = function(u, f, m, a) {
   }
   x.send(a)
 };
-POST = function POST(url, func, args) {
+POST = function POST(url, callback, args) {
   ajax.send(url, func, "POST", args);
 };
 

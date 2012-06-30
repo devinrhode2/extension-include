@@ -6,46 +6,79 @@ Some general motha fuckin functions for extension development, TOTALLY undocumen
 Methods
 ---------------
 
-<ul>
-<li>
-###getClass, getId, getClass
+* **getId, getClass, and getTag**
 
-Simple wrappers on getElementById, getElementsByClass, and getElementsByTagName
+  simple wrappers on `getElementbyId, getElementsByClassName, and getElementsByTagName`
 
-</li>
-<li>
+*  **GET, POST**
 
-###GET, POST
+    `GET('url', function(responseText, fullXhr){ });`
 
-```GET('url', function(responseText, fullXhr){
+    `POST('url', function(responseText, fullXhr){ }, 'param1=foo');`
+
+
+* **log, warn, error**
+
+  Simple wrappers on console.log, console.warn, console.error
+
+* **fail**
+
+  Alerts and throws an error message: **`fail('some shit happened!');`**
+
+* **trackEvent**
+
+  Simple wrapper on analytics tracking, adjust to your own analytics system. Right now it's opinionated to KissMetrics
+
+* **String.contains**
+
+  **_Coming in EcmaScript 6!!!_**
   
-});```
+  `var string = 'https://github.com';`
 
-</li>
-<li>
+  `string.contains('https') === true`
 
-###log, warn, error
+* **storageDefault**, Default localStorage items:
 
-Simple wrappers on console.log, console.warn, console.error
+  `storageDefault('thing', 'bar');`
 
-</li>
-<li>
+  This only writes the value to localStorage if the key is currently _**not**_ defined.
 
-###fail
+* **createElement**
 
-Alerts and throws an error message: `fail('some shit happened!');`
+  Lightly enhanced wrapper on `document.createElement`, simply accepts additional arguments for more easily setting properties, and attributes:
 
-</li>
-<li></li>
-<li></li>
-<li></li>
+  <code>
+var div = createElement('div', {
+
+          innerHTML: 'foo', 
+          id: 'bar'
+      }, {
+
+          'explicitly-an-attribute': 'baz'
+      });
+</code>
+
+* **runInPage**
+  
+  _This is only relevant for chrome extensions, feel free to strip it out._
+  
+  This method simply runs some javascript functions or strings of code _in the context of the page's dom, outside of Chrome's isolated world_
+
+  `runInPage('//these comments screw things up because... '+
+    'evenThisFunctionCallIsCommentedOut();');`
+
+    `runInPage(function(){
+      /*this is better*/
+    });`
+
+#And last but not least: [<h1>`nodeReady`</h1>](https://github.com/devinrhode2/node-ready)
+
+<h2>It's too awesome to document here, go learn about it at the above link.
 
 Install
 ---------------
 
     npm install extension-include
-
-OOO!
 
 Creator
 ---------------
