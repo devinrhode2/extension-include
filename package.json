@@ -1,6 +1,6 @@
 {
   "name": "extension-include",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "Some really nifty functions for high performance chrome extensions",
   "author": "Devin Rhode <devinrhode2@gmail.com> (http://thescoutapp.com)",
   "main": "extension-include.js",
