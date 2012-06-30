@@ -3,6 +3,43 @@ Extension-include.js
 
 Some general motha fuckin functions for extension development, TOTALLY undocumented because it's for muah until you message me!
 
+Methods
+---------------
+
+<ul>
+<li>
+###getClass, getId, getClass
+
+Simple wrappers on getElementById, getElementsByClass, and getElementsByTagName
+
+</li>
+<li>
+
+###GET, POST
+
+```GET('url', function(responseText, fullXhr){
+  
+});```
+
+</li>
+<li>
+
+###log, warn, error
+
+Simple wrappers on console.log, console.warn, console.error
+
+</li>
+<li>
+
+###fail
+
+Alerts and throws an error message: `fail('some shit happened!');`
+
+</li>
+<li></li>
+<li></li>
+<li></li>
+
 Install
 ---------------
 
