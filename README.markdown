@@ -3,6 +3,8 @@ Extension-include.js
 
 Some general motha fuckin functions for extension development, TOTALLY undocumented because it's for muah until you message me!
 
+Disclosure: fuck my docs, literally edit & improve away.
+
 Methods
 ---------------
 
