@@ -107,7 +107,8 @@ error = function error(message){
 };
 
 //KISSmetrics
-event = function event(){
+event = 
+  function event(){
   if (typeof _kmq === 'undefined') {
     window._kmq = [];
   }
