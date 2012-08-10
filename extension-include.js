@@ -193,7 +193,7 @@ runInPage = function runInPage() {
     console.error('CAUGHT ERROR: ', e, 'on:', script.innerHTML);
   }
   //script.removeNode(true); ?
-}
+};
 
 /* node-ready 
  * See https://github.com/devinrhode2/node-ready
