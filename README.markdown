@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/devinrhode2/extension-include.png)](http://travis-ci.org/devinrhode2/extension-include)
 Extension-include.js
 =================
 
