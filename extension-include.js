@@ -1,18 +1,13 @@
 /* By Devin Rhode (devinrhode2@gmail.com)
- * General library-esque functions!
- *
- * getClass is a wrapper on document.getElementsByClassName
- * getId is a wrapper on getElementById
- * log('things like', trickyVaribles);
- * fail('When some bad shit occured.'); //throws and alerts error.
- *
- * contains: Does a string have a certain substring inside it? returns boolean
+ * General use functions for Chrome extensions!
  */
+/*jslint nomen: true, vars: true, white: true, browser: true, devel: true */
 
-//'globals':
+
+//local globals:
 var getClass, getId, getTag, GET, POST, fail, log, warn, error, trackEvent, storageDefault, createElement, runInPage, nodeReady;
 (function extensionInclude() {
-'use strict';
+'use strict';	
 
 getClass = function getClass(elements) {
   return document.getElementsByClassName(elements);
@@ -27,33 +22,29 @@ HTMLElement.prototype.getClass = HTMLElement.prototype.getElementsByClassName;
 HTMLElement.prototype.getId = HTMLElement.prototype.getElementById;
 HTMLElement.prototype.getTag = HTMLElement.prototype.getElementsByTagName;
 
-String.prototype.contains = function StringPrototypeContains(string) {
+String.prototype.contains = function StringContains(string) {
   return this.indexOf(string) > -1;
 };
 
-var ajax = {};
-ajax.x = function() {
-  return new XMLHttpRequest;
-};
-ajax.send = function(u, f, m, a) {
-  var x = ajax.x();
-  x.open(m, u, true);
-  x.onreadystatechange = function() {
-    if(x.readyState === 4) {
-      f(x.responseText, x);
+var ajaxSend = function(url, callback, method, args) {
+  var xhr = new XMLHttpRequest();
+  xhr.open(method, url, true);
+  xhr.onreadystatechange = function XHROnReadyStateChange() {
+    if(xhr.readyState === 4) {
+      callback(xhr.responseText, xhr);
     }
   };
-  if(m === 'POST') {
-    x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  if(method === 'POST') {
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
   }
-  x.send(a);
+  xhr.send(args);
 };
-POST = function POST(url, callback, args) {
-  ajax.send(url, func, 'POST', args);
+POST = function POST(url, callback,         args) {
+            ajaxSend(url, callback, 'POST', args);
 };
 
 GET = function GET(url, callback) {
-  ajax.send(url, callback, 'GET');
+          ajaxSend(url, callback, 'GET');
 };
 
 var masterHistory = function masterHistory() {
@@ -64,7 +55,7 @@ var masterHistory = function masterHistory() {
 fail = function fail(message) {
   masterHistory(arguments);
   alert(message);
-  throw message;
+  throw new Error(message);
 };
 
 //from HTML5 boilerplate. Paul Irish is awesome. I have no idea why the function name is 'f'...
@@ -76,17 +67,17 @@ log = function f() {
       var newarr;
   
       try {
-          args.callee = f.caller;
+        args.callee = f.caller;
       } catch(e) {
-  
+        
       }
   
       newarr = [].slice.call(args);
   
       if (typeof console.log === 'object') {
-          log.apply.call(console.log, console, newarr);
+        log.apply.call(console.log, console, newarr);
       } else {
-          console.log.apply(console, newarr);//
+        console.log.apply(console, newarr);
       }
     }
   }
@@ -124,24 +115,21 @@ storageDefault = function storageDefault(arg1, arg2) {
     if (localStorage.getItem(arg1) === null) {
       localStorage.setItem(arg1, arg2);
     }
-  } else {
-    if (typeof arg1 === 'object') {
-      for (var key in arg1) {
-        if (localStorage.getItem(key) === null) {
-          localStorage.setItem(arg1, arg1[key]);
-        }
+  } else if (typeof arg1 === 'object') {
+    for (var key in arg1) {
+      if (localStorage.getItem(key) === null) {
+        localStorage.setItem(arg1, arg1[key]);
       }
-    } else {
-      fail('storageDefault expects an object or 2 string arguments');
     }
+  } else {
+    fail('storageDefault expects an object or 2 string arguments');
   }
 };
 
 
-//very extension specific:
 //coolest method ever!
 createElement = function createElement(element, props, attributes) {
-  var element = document.createElement(element);
+  element = document.createElement(element);
   if (typeof props !== 'undefined') {
     for (var prop in props) {
       element[prop] = props[prop];
@@ -157,7 +145,7 @@ createElement = function createElement(element, props, attributes) {
 
 /**
  * guardedParse - protected JSON.parse
- * assumes chrome, assumes JSON
+ * assumes JSON.parse is defined
  */
 JSON.guardedParse = function guardedParse(string) {
   var returnValue = {};
@@ -177,9 +165,12 @@ JSON.guardedParse = function guardedParse(string) {
 };
 
 
+//very extension specific:
+/**
+ * runInPage - run a peice of javascript in the context of the page's DOM, not an isolated world
+ */
 runInPage = function runInPage() {
-  var script = document.createElement('script');
-  script.innerHTML = '';
+  var script = createElement('script', {innerHTML: ''});
   for (var task in arguments) {
     if (typeof arguments[task] === 'string') {
       script.innerHTML += arguments[task];
@@ -189,20 +180,20 @@ runInPage = function runInPage() {
   }
   try {
     document.documentElement.appendChild(script);
+    //could do: script.removeNode(true);
   } catch (e) {
     console.error('CAUGHT ERROR: ', e, 'on:', script.innerHTML);
   }
-  //script.removeNode(true); ?
 };
 
-/* node-ready 
+/**
+ * node-ready 
  * See https://github.com/devinrhode2/node-ready
  * Send questions/problems/critiques on code to: DevinRhode2@gmail.com (put "skywalker.js" in the title)
  */
 
 nodeReady = function nodeReady(call, readyCallback, timeout) {
-  'use strict';//steppin it up!
-  var box = typeof call; //our one and only var...?!
+  var box = typeof call; //box is our one and only var!
   if (box === 'string') {
     try {
       //breakup each dot, checking if (item) then going item.next, which recursively becomes item
