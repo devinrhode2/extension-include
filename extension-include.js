@@ -1,13 +1,99 @@
-/* By Devin Rhode (devinrhode2@gmail.com)
+/**
+ * By Devin Rhode (devinrhode2@gmail.com)
  * General use functions for Chrome extensions!
  */
+ 
 /*jslint nomen: true, vars: true, white: true, browser: true, devel: true */
 
+//2 prototypes:
+/**
+ * String.contains
+ * returns boolean
+ * Example: 'foo'.contains('o') === true
+ */
+if (!String.prototype.contains) {
+  String.prototype.contains = function contains(string) {
+    return this.indexOf(string) > -1;
+  };
+}
 
-//local globals:
-var getClass, getId, getTag, GET, POST, fail, log, warn, error, trackEvent, storageDefault, createElement, runInPage, nodeReady;
+/**
+ * Array.forEach
+ * forEach item in array, run a function
+ * [0, 2].forEach(function(item, index, array){ });
+ * 100% true to the ECMA-262, 5th edition
+ * from: https://developer.mozilla.org/docs/JavaScript/Reference/Global_Objects/Array/forEach
+ */
+if ( !Array.prototype.forEach ) {
+  Array.prototype.forEach = function forEach( callback, thisArg ) {
+ 
+    var T, k;
+ 
+    if ( this == null ) {
+      throw new TypeError( "this is null or not defined" );
+    }
+ 
+    // 1. Let O be the result of calling ToObject passing the |this| value as the argument.
+    var O = Object(this);
+ 
+    // 2. Let lenValue be the result of calling the Get internal method of O with the argument "length".
+    // 3. Let len be ToUint32(lenValue).
+    var len = O.length >>> 0; // Hack to convert O.length to a UInt32
+ 
+    // 4. If IsCallable(callback) is false, throw a TypeError exception.
+    // See: http://es5.github.com/#x9.11
+    if ( {}.toString.call(callback) != "[object Function]" ) {
+      throw new TypeError( callback + " is not a function" );
+    }
+ 
+    // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
+    if ( thisArg ) {
+      T = thisArg;
+    }
+ 
+    // 6. Let k be 0
+    k = 0;
+ 
+    // 7. Repeat, while k < len
+    while( k < len ) {
+ 
+      var kValue;
+ 
+      // a. Let Pk be ToString(k).
+      //   This is implicit for LHS operands of the in operator
+      // b. Let kPresent be the result of calling the HasProperty internal method of O with argument Pk.
+      //   This step can be combined with c
+      // c. If kPresent is true, then
+      if ( k in O ) {
+ 
+        // i. Let kValue be the result of calling the Get internal method of O with argument Pk.
+        kValue = O[ k ];
+ 
+        // ii. Call the Call internal method of callback with T as the this value and
+        // argument list containing kValue, k, and O.
+        callback.call( T, kValue, k, O );
+      }
+      // d. Increase k by 1.
+      k++;
+    }
+    // 8. return undefined
+  };
+}
+
+//local globals: These are all the functions defined from this library:
+var getClass, /*document.getElementsByClassName*/
+    getId, /*document.getElementById*/
+    getTag, /*document.getElementsByTagName*/
+    GET,  /*GET  ajax request wrapper: GET (url, function(response){ }) */
+    POST, /*POST ajax request wrapper: POST(url, function(response){ }, args); */
+    fail, /*alerts message and throws that error: fail('bad thing happened') */
+    trackEvent, /*generic analytics event wrapper, currently coded to work with KISSmetrics*/
+    storageDefault, /*default one or many local storage keys*/
+    createElement, /*createElement('div', {innerHTML: 'hi'}, {'data-attr':'bar'})*/
+    runInPage, /*for extensions, run some javascript in the context of the page*/
+    nodeReady; /*run a callback when a DOM node is ready and available*/
 (function extensionInclude() {
-'use strict';	
+'use strict';
 
 getClass = function getClass(elements) {
   return document.getElementsByClassName(elements);
@@ -22,10 +108,6 @@ HTMLElement.prototype.getClass = HTMLElement.prototype.getElementsByClassName;
 HTMLElement.prototype.getId = HTMLElement.prototype.getElementById;
 HTMLElement.prototype.getTag = HTMLElement.prototype.getElementsByTagName;
 
-String.prototype.contains = function StringContains(string) {
-  return this.indexOf(string) > -1;
-};
-
 var ajaxSend = function(url, callback, method, args) {
   var xhr = new XMLHttpRequest();
   xhr.open(method, url, true);
@@ -39,65 +121,40 @@ var ajaxSend = function(url, callback, method, args) {
   }
   xhr.send(args);
 };
+
+/**
+ * POST
+ * Basic POST ajax request
+ * POST(url, function(responseString){}, 'ar1=2&arg2=3');
+ */
 POST = function POST(url, callback,         args) {
             ajaxSend(url, callback, 'POST', args);
 };
 
+/**
+ * POST
+ * Basic POST ajax request
+ * POST(url, function(responseString){}, 'ar1=2&arg2=3');
+ */
 GET = function GET(url, callback) {
           ajaxSend(url, callback, 'GET');
 };
 
-var masterHistory = function masterHistory() {
-  //have a master switch on caller.name === 'f' (log) || 'warn' || 'fail' || 'error'
-};
-
-//fail, program cannot continue. Alert a message, and kill it
+/**
+ * fail
+ * program cannot continue. Alert a message, and kill it.
+ * fail('oh shit');
+ */
 fail = function fail(message) {
-  masterHistory(arguments);
   alert(message);
   throw new Error(message);
 };
 
-//from HTML5 boilerplate. Paul Irish is awesome. I have no idea why the function name is 'f'...
-log = function f() {
-  masterHistory(arguments);
-  if (typeof debug !== 'undefined' && debug) {
-    if (typeof console !== 'undefined') { // with if (this.console) I was getting "Uncaught TypeError: Cannot read property 'console' of undefined"
-      var args = arguments;
-      var newarr;
-  
-      try {
-        args.callee = f.caller;
-      } catch(e) {
-        
-      }
-  
-      newarr = [].slice.call(args);
-  
-      if (typeof console.log === 'object') {
-        log.apply.call(console.log, console, newarr);
-      } else {
-        console.log.apply(console, newarr);
-      }
-    }
-  }
-};
-
-
-//Some common pitfall that is handled. Application will continue fine.
-warn = function warn(message) {
-  masterHistory(arguments);
-  debug && console.warn(message);
-  return message;
-};
-//some error where the program will continue, but this scenario really shouldn't be occuring
-error = function error(message) {
-  masterHistory(arguments);
-  debug && console.error(message);
-  return message;
-};
-
-//KISSmetrics
+/**
+ * trackEvent
+ * Generic analytics wrapper, currently coded against KISSmetrics
+ * trackEvent('a user did this thing');
+ */
 trackEvent = function trackEvent() {
   if (typeof _kmq === 'undefined') {
     window._kmq = [];
@@ -110,6 +167,15 @@ trackEvent = function trackEvent() {
   }
 };
 
+/**
+ * storageDefault
+ * defaults localStorage properties
+ * storageDefault('key', 'value');
+ * storageDefault({
+ *   key: 'value',
+ *   key2: 'value2'
+ * });
+ */
 storageDefault = function storageDefault(arg1, arg2) {
   if (typeof arg1 === 'string') {
     if (localStorage.getItem(arg1) === null) {
@@ -127,7 +193,11 @@ storageDefault = function storageDefault(arg1, arg2) {
 };
 
 
-//coolest method ever!
+/**
+ * createElement
+ * -coolest method ever!
+ * createElement('script', {innerHTML: 'foo'}, {data-attribute: 'bar'});
+ */
 createElement = function createElement(element, props, attributes) {
   element = document.createElement(element);
   if (typeof props !== 'undefined') {
@@ -165,9 +235,13 @@ JSON.guardedParse = function guardedParse(string) {
 };
 
 
-//very extension specific:
+
+/** VERY extension specific: **/
+
 /**
- * runInPage - run a peice of javascript in the context of the page's DOM, not an isolated world
+ * runInPage
+ * run a peice of javascript in the context of the page's DOM, not an isolated world
+ * runInPage(function(){ console.log(FB.user); });
  */
 runInPage = function runInPage() {
   var script = createElement('script', {innerHTML: ''});
@@ -191,7 +265,6 @@ runInPage = function runInPage() {
  * See https://github.com/devinrhode2/node-ready
  * Send questions/problems/critiques on code to: DevinRhode2@gmail.com (put "skywalker.js" in the title)
  */
-
 nodeReady = function nodeReady(call, readyCallback, timeout) {
   var box = typeof call; //box is our one and only var!
   if (box === 'string') {
