@@ -66,12 +66,15 @@ var div = createElement('div', {
   This method simply runs some javascript functions or strings of code _in the context of the page's dom, outside of Chrome's isolated world_
 
   ```javascript
-  runInPage('//these comments screw things up because... '+
-    'evenThisFunctionCallIsCommentedOut();');
+  runInPage(function(){typeof chrome.extension === 'undefined'});
+  
+  runInPage(
+    '//these comments screw things up because... '+'evenThisFunctionCallIsCommentedOut();'
+  );
 
-    runInPage(function(){
-      /*this is better*/
-    });
+  runInPage(function(){
+    /*this is better*/
+  });
 ```
 
 #And last but not least: [<h1>`nodeReady`</h1>](https://github.com/devinrhode2/node-ready)
