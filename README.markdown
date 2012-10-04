@@ -3,8 +3,6 @@ Extension-include.js
 
 Some general motha fuckin functions for extension development, TOTALLY undocumented because it's for muah until you message me!
 
-Disclosure: fuck my docs, literally edit & improve away.
-
 Methods
 ---------------
 
@@ -80,6 +78,17 @@ var div = createElement('div', {
 #And last but not least: [<h1>`nodeReady`</h1>](https://github.com/devinrhode2/node-ready)
 
 <h2>It's too awesome to document here, go learn about it at the above link.
+
+
+TODO
+------
+_Because software'e never done_<br>
+Setup docs to generate via JSDoc with this:
+https://github.com/jsdoc3/jsdoc
+
+Setup testing with something listed here:
+http://ryanseddon.github.com/bunyip/
+
 
 Install
 ---------------
