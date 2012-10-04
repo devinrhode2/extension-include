@@ -14,10 +14,10 @@ Methods
 
 *  **GET, POST**
 
-    `GET('url', function(responseText, fullXhr){ });`
-
-    `POST('url', function(responseText, fullXhr){ }, 'param1=foo');`
-
+  ```javascript
+GET('url', function(responseText, fullXhr){ });
+POST('url', function(responseText, fullXhr){ }, 'param1=foo');
+```
 
 * **log, warn, error**
 
@@ -35,9 +35,10 @@ Methods
 
   **_Coming in EcmaScript 6!!!_**
   
-  `var string = 'https://github.com';`
-
-  `string.contains('https') === true`
+  ```javascript
+var string = 'https://github.com';`
+string.contains('https') === true
+```
 
 * **storageDefault**, Default localStorage items:
 
@@ -49,16 +50,14 @@ Methods
 
   Lightly enhanced wrapper on `document.createElement`, simply accepts additional arguments for more easily setting properties, and attributes:
 
-  <code>
+  ```javascript
 var div = createElement('div', {
-
-          innerHTML: 'foo', 
-          id: 'bar'
-      }, {
-
-          'explicitly-an-attribute': 'baz'
-      });
-</code>
+  innerHTML: 'foo', 
+  id: 'bar'
+}, {
+  'data-attr': 'explicit'
+});
+```
 
 * **runInPage**
   
