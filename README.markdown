@@ -65,12 +65,14 @@ var div = createElement('div', {
   
   This method simply runs some javascript functions or strings of code _in the context of the page's dom, outside of Chrome's isolated world_
 
-  `runInPage('//these comments screw things up because... '+
-    'evenThisFunctionCallIsCommentedOut();');`
+  ```javascript
+  runInPage('//these comments screw things up because... '+
+    'evenThisFunctionCallIsCommentedOut();');
 
-    `runInPage(function(){
+    runInPage(function(){
       /*this is better*/
-    });`
+    });
+```
 
 #And last but not least: [<h1>`nodeReady`</h1>](https://github.com/devinrhode2/node-ready)
 
@@ -80,6 +82,12 @@ Install
 ---------------
 
     npm install extension-include
+
+OR (coming soon to npm)
+    
+    npm install devinrhode2/extension-include
+
+The npm version is not the latest, it's recommended to clone directly via git or use the 2nd method.
 
 Creator
 ---------------
