@@ -1,7 +1,7 @@
 Extension-include.js
 =================
 
-Some general motha fuckin functions for extension development, TOTALLY undocumented because it's for muah until you message me!
+Some general use functions for extension development
 
 Methods
 ---------------
