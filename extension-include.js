@@ -5,6 +5,10 @@
  
 /*jslint nomen: true, vars: true, white: true, browser: true, devel: true */
 
+/**
+ * Define _.has method if it isn't already defined
+ * Example: _.has(MainHostObject, property) === true/false
+ */
 if (typeof _ === 'undefined') {
   var _ = {
     has: function has(object, key) {
