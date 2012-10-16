@@ -116,7 +116,7 @@ var getClass, //document.getElementsByClassName
   HTMLElement.prototype.getId = HTMLElement.prototype.getElementById;
   HTMLElement.prototype.getTag = HTMLElement.prototype.getElementsByTagName;
   
-  var ajaxSend = function(url, callback, method, args) {
+  var ajaxSend = function ajaxSend(url, callback, method, args) {
     var xhr = new XMLHttpRequest();
     xhr.open(method, url, true);
     xhr.onreadystatechange = function XHROnReadyStateChange() {
