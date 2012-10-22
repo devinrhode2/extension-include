@@ -3,88 +3,13 @@ Extension-include.js
 
 Some general use functions for extension development
 
-Methods
----------------
-
-* **getId, getClass, and getTag**
-
-  simple wrappers on `getElementbyId, getElementsByClassName, and getElementsByTagName`
-
-*  **GET, POST**
-
-  ```javascript
-GET('url', function(responseText, fullXhr){ });
-POST('url', function(responseText, fullXhr){ }, 'param1=foo');
-```
-
-* **log, warn, error**
-
-  Simple wrappers on console.log, console.warn, console.error
-
-* **fail**
-
-  Alerts and throws an error message: **`fail('some shit happened!');`**
-
-* **trackEvent**
-
-  Simple wrapper on analytics tracking, adjust to your own analytics system. Right now it's opinionated to KissMetrics
-
-* **String.contains**
-
-  **_Coming in EcmaScript 6!!!_**
-  
-  ```javascript
-var string = 'https://github.com';`
-string.contains('https') === true
-```
-
-* **storageDefault**, Default localStorage items:
-
-  `storageDefault('thing', 'bar');`
-
-  This only writes the value to localStorage if the key is currently _**not**_ defined.
-
-* **createElement**
-
-  Lightly enhanced wrapper on `document.createElement`, simply accepts additional arguments for more easily setting properties, and attributes:
-
-  ```javascript
-var div = createElement('div', {
-  innerHTML: 'foo', 
-  id: 'bar'
-}, {
-  'data-attr': 'explicit'
-});
-```
-
-* **runInPage**
-  
-  _This is only relevant for chrome extensions, feel free to strip it out._
-  
-  This method simply runs some javascript functions or strings of code _in the context of the page's dom, outside of Chrome's isolated world_
-
-  ```javascript
-  runInPage(function(){typeof chrome.extension === 'undefined'});
-  
-  runInPage(
-    '//these comments screw things up because... '+'evenThisFunctionCallIsCommentedOut();'
-  );
-
-  runInPage(function(){
-    /*this is better*/
-  });
-```
-
-#And last but not least: [<h1>`nodeReady`</h1>](https://github.com/devinrhode2/node-ready)
-
-<h2>It's too awesome to document here, go learn about it at the above link.
+Source code is documented, read that.
 
 
 TODO
 ------
 _Because software'e never done_<br>
-Setup docs to generate via JSDoc with this:
-https://github.com/jsdoc3/jsdoc
+Setup docs to generate with docco
 
 Setup testing with something listed here:
 http://ryanseddon.github.com/bunyip/
