@@ -223,10 +223,10 @@ var getClass, //document.getElementsByClassName
         }
       }
     };
-    each(props, function forEachProps(hash, key){
-      element[item] = hash[key];
+    each(props, function forEachProps(hash, key) {
+      element[key] = hash[key];
     });
-    each(attributes, function forEachAttrs(hash, key){
+    each(attributes, function forEachAttrs(hash, key) {
       element.setAttribute(key, hash[key]);
     });
     return element;
