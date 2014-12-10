@@ -9,22 +9,17 @@ Source code is documented, read that.
 TODO
 ------
 _Because software'e never done_<br>
-Setup docs to generate with docco
+ - Setup docs to generate with docco
 
-Setup testing with something listed here:
-http://ryanseddon.github.com/bunyip/
+ - Setup testing with testem
 
 
 Install
 ---------------
 
-    npm install extension-include
-
-OR (coming soon to npm)
-    
     npm install devinrhode2/extension-include
 
-The npm version is not the latest, it's recommended to clone directly via git or use the 2nd method.
+`extension-include` is on npm but I won't be updating that anymore. 
 
 Creator
 ---------------
